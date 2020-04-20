@@ -1,6 +1,6 @@
 # monstersgame-automation
 ## Login  
-First, setup your secrets at credentials.py
+First, setup your secrets at credentials.py  
 `bot = FarmerBot()`  
 `bot.login()`  
   
