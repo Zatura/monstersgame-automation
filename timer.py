@@ -9,4 +9,4 @@ def sleep_randomized(seconds, extra_seconds):
 
 def print_time(text):
     current_time = datetime.now().strftime("%H:%M:%S")
-    print(text + " ", current_time)
+    print(current_time, text)

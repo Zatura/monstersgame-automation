@@ -1,2 +1,2 @@
-usr = "usr"
-pwd = "pwd"
+usr = "put your username here"
+pwd = "puy your password here"
