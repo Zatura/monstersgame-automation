@@ -1,15 +1,15 @@
 {
     "KitbreaK": {
-        "bounty": 29,
-        "timestamp": 1589926093
+        "bounty": 35,
+        "timestamp": 1594080682
     },
     "alexdelta": {
-        "bounty": 26,
-        "timestamp": 1589664409
+        "bounty": 19,
+        "timestamp": 1594081651
     },
     "Drakodragon": {
-        "bounty": 37,
-        "timestamp": 1589665348
+        "bounty": 34,
+        "timestamp": 1594093772
     },
     "bisket": {
         "bounty": 24,
@@ -20,12 +20,12 @@
         "timestamp": 1589600818
     },
     "AlissonBRA": {
-        "bounty": 40,
-        "timestamp": 1590027856
+        "bounty": 31,
+        "timestamp": 1594078780
     },
     "Lordmam": {
-        "bounty": 41,
-        "timestamp": 1590028821
+        "bounty": 21,
+        "timestamp": 1594079706
     },
     "dark87": {
         "bounty": 28,
@@ -44,16 +44,16 @@
         "timestamp": 1589510349
     },
     "Mona Dark": {
-        "bounty": 42,
-        "timestamp": 1589608037
+        "bounty": 39,
+        "timestamp": 1594263180
     },
     "PedroMMP": {
-        "bounty": 43,
-        "timestamp": 1589512264
+        "bounty": 34,
+        "timestamp": 1594262186
     },
     "Lady Mary": {
-        "bounty": 48,
-        "timestamp": 1589513217
+        "bounty": 33,
+        "timestamp": 1594180666
     },
     "Salazar Slypherin": {
         "bounty": 27,
@@ -68,8 +68,8 @@
         "timestamp": 1589089778
     },
     "Hans": {
-        "bounty": 42,
-        "timestamp": 1589090712
+        "bounty": 29,
+        "timestamp": 1594264143
     },
     "Mohr": {
         "bounty": 26,
@@ -96,8 +96,8 @@
         "timestamp": 1589096404
     },
     "XxMorganaxX": {
-        "bounty": 47,
-        "timestamp": 1589097373
+        "bounty": 52,
+        "timestamp": 1594260001
     },
     "Mrs.StreSsiTu": {
         "bounty": 20,
@@ -167,10 +167,6 @@
         "bounty": 44,
         "timestamp": 1589163255
     },
-    "Lady Butterfly ": {
-        "bounty": 66,
-        "timestamp": 1589164226
-    },
     "num1pt": {
         "bounty": 0,
         "timestamp": 1589165170
@@ -208,8 +204,8 @@
         "timestamp": 1589741185
     },
     "lucasnos": {
-        "bounty": 46,
-        "timestamp": 1589742180
+        "bounty": 42,
+        "timestamp": 1594260990
     },
     "xPTo": {
         "bounty": 0,
@@ -218,5 +214,9 @@
     "assassinoboy": {
         "bounty": 23,
         "timestamp": 1589745447
+    },
+    "p3l3": {
+        "bounty": 48,
+        "timestamp": 1594479258
     }
 }

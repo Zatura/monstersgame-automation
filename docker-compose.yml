@@ -1,0 +1,18 @@
+version: "3"
+services:
+  automation:
+    build: .
+    image: python:3.8-alpine
+    ports:
+      - 5000:5000
+    volumes:
+      - data:/monstersgame
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.57.0/24
+
+volumes:
+  data:

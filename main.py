@@ -1,14 +1,16 @@
 from bot import Bot
 from scheduler import Scheduler
-from datetime import datetime, timezone
-from enemies import known_enemies
-import json
 
 bot = Bot()
 scheduler = Scheduler()
+
 scheduler.enqueue(bot.login)
-scheduler.enqueue(bot._navigate_graveyeard)
+scheduler.begin_loop()
 scheduler.enqueue(bot.hunt_humans)
-scheduler.enqueue(lambda: bot.hunt_by_list(known_enemies))
-scheduler.enqueue(bot.hunt_enemies)
+scheduler.begin_loop(count=23)
+scheduler.enqueue(lambda: bot.hunt_by_registry(1))
+scheduler.enqueue(lambda: bot.work(1))
+scheduler.end_loop()
+scheduler.end_loop()
+
 scheduler.execute()
