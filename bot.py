@@ -66,6 +66,7 @@ class Bot:
         logging.info('Start working {} hours at graveyard'.format(hours))
         self._save_punch_clock(hours)
         sleep_randomized(hours*3600, 10)
+        self._navigate_graveyeard()
 
     def hunt_enemies(self):
         while True:
