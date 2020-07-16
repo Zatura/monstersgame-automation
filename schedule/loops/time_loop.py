@@ -1,7 +1,7 @@
 from schedule.loops.loop import Loop
 from schedule import timer
 
-FOREVER = 999999990
+FOREVER = 9999999999
 
 
 class TimeLoop(Loop):

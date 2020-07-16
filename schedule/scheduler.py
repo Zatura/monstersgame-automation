@@ -6,7 +6,6 @@ class Scheduler(Stack):
     def __init__(self):
         super().__init__()
         self.loop_manager = LoopManager()
-        self._loops = []
 
     def begin(self, loop):
         stack_position = len(self._stack)
