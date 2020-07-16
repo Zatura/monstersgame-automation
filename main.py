@@ -1,16 +1,18 @@
-from bot import Bot
-from scheduler import Scheduler
+from model.bot import Bot
+from schedule.loops.time_loop import TimeLoop
+from schedule.loops.counter_loop import CounterLoop
+from schedule.scheduler import Scheduler
 
 bot = Bot()
 scheduler = Scheduler()
 
 scheduler.push(lambda: bot.login())
-scheduler.begin_loop()
+scheduler.begin(TimeLoop())
 scheduler.push(lambda: bot.hunt_humans())
-scheduler.begin_loop(count=23)
+scheduler.begin(CounterLoop(23))
 scheduler.push(lambda: bot.hunt_by_registry(1))
 scheduler.push(lambda: bot.work(1))
-scheduler.end_loop()
-scheduler.end_loop()
+scheduler.end()
+scheduler.end()
 
 scheduler.execute()

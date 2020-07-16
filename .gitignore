@@ -1,5 +1,5 @@
 # Project related 
-credentials.py
+auth/credentials.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

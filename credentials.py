@@ -1,2 +1,0 @@
-usr = "user"
-pwd = "password"

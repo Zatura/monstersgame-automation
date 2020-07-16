@@ -2,9 +2,9 @@ from selenium import webdriver
 import logging
 from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import NoSuchElementException
-from credentials import usr, pwd
-from character import Character
-from timer import sleep_randomized
+from auth.credentials import usr, pwd
+from model.character import Character
+from schedule.timer import sleep_randomized
 from datetime import datetime, timezone
 import random
 import re
@@ -102,7 +102,7 @@ class Bot:
         logging.info("Finish hunt")
 
     def hunt_by_registry(self, quantity=None):
-        with open('data/bounties.json', "r") as file:
+        with open('../data/bounties.json', "r") as file:
             try:
                 enemies = json.load(file)
             except json.decoder.JSONDecodeError:
@@ -254,7 +254,7 @@ class Bot:
         sleep_randomized(2, 3)
 
     def _save_bounty(self, name, bounty):
-        with open('data/bounties.json', "a+") as file:
+        with open('../data/bounties.json', "a+") as file:
             try:
                 file.seek(0)
                 enemies = json.load(file)
@@ -263,11 +263,11 @@ class Bot:
             enemies[name] = {}
             enemies[name]['bounty'] = bounty
             enemies[name]['timestamp'] = self._timestamp()
-        with open('data/bounties.json', "w") as file:
+        with open('../data/bounties.json', "w") as file:
             json.dump(enemies, file, indent=4)
 
     def _save_punch_clock(self, hours):
-        with open('data/punch_clock.json', "a+") as file:
+        with open('../data/punch_clock.json', "a+") as file:
             try:
                 file.seek(0)
                 entries = json.load(file)
@@ -277,12 +277,12 @@ class Bot:
             timestamp = self._timestamp()
             entry[timestamp] = hours
             entries.append(entry)
-        with open('data/punch_clock.json', "w") as file:
+        with open('../data/punch_clock.json', "w") as file:
             json.dump(entries, file, indent=4)
 
     @staticmethod
     def _load():
-        with open('data/bounties.json', "r") as file:
+        with open('../data/bounties.json', "r") as file:
             enemies = json.load(file)
         return enemies
 
