@@ -5,7 +5,7 @@ class Loop:
         self.position = None
         pass
 
-    def end_loop(self):
+    def has_finished(self):
         pass
 
     def increment_count(self):
