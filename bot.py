@@ -128,7 +128,7 @@ class Bot:
                 else:
                     logging.info('Could not attack {}, last attack was {} hours ago.'.format(name, round(hours, 1)))
                     continue
-                quantity =- 1
+                quantity -= 1
             except NoSuchElementException:
                 logging.info('Could not attack ' + name + ' NoSuchElementException')
                 sleep_randomized(5, 5)
@@ -173,7 +173,6 @@ class Bot:
             logging.info("Attack  " + result + " Name: " + self.enemy.name + "  Bounty: " + str(gold))
             if winner != self.enemy.name:
                 self._save_bounty(self.enemy.name, gold)
-            sleep_randomized(902, 60)
 
     def repeat_hunt_enemies(self):
         self.driver.find_element_by_xpath('//*[@id="maincontent"]/form/div[4]/input').click()
