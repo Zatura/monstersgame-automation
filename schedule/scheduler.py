@@ -13,4 +13,10 @@ class Scheduler(Stack):
         self.push(lambda: self.loop_manager.start_iteration())
 
     def end(self):
-        self.push(lambda: self.loop_manager.check())
+        self.push(lambda: self.loop_check())
+
+    def loop_check(self):
+        position = self.loop_manager.check()
+        if position:
+            self._position = position
+
