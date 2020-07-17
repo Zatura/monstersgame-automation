@@ -101,7 +101,7 @@ class Bot:
                 continue
         logging.info("Finish hunt")
 
-    def hunt_by_registry(self, quantity=None):
+    def hunt_by_registry(self, quantity=-1):
         with open('data/bounties.json', "r") as file:
             try:
                 enemies = json.load(file)
@@ -118,7 +118,7 @@ class Bot:
 
         for index, name in enumerate(enemies):
             try:
-                if index == quantity:
+                if not quantity:
                     break
                 hours = (self._timestamp() - enemies[name]['timestamp'])/60/60
                 if hours > 12:
@@ -126,7 +126,9 @@ class Bot:
                     self.enemy = self.find_enemy_by_name(name)
                     self.attack()
                 else:
-                    logging.info('Could not attack ' + name + ', last attack was ' + round(hours, 2) + ' ago.')
+                    logging.info('Could not attack {}, last attack was {} hours ago.'.format(name, round(hours, 1)))
+                    continue
+                quantity =- 1
             except NoSuchElementException:
                 logging.info('Could not attack ' + name + ' NoSuchElementException')
                 sleep_randomized(5, 5)
