@@ -65,7 +65,7 @@ class Bot:
         graves_list[index].click()
         logging.info('Start working {} hours at graveyard'.format(hours))
         self._save_punch_clock(hours)
-        sleep_randomized(hours*3600, 10)
+        sleep_randomized(hours*3630, 10)
         self._navigate_graveyeard()
 
     def hunt_enemies(self):
@@ -126,7 +126,7 @@ class Bot:
                     self.enemy = self.find_enemy_by_name(name)
                     self.attack()
                 else:
-                    logging.info('Could not attack ' + name, ', last attack was ', hours, ' ago.')
+                    logging.info('Could not attack ' + name + ', last attack was ' + round(hours, 2) + ' ago.')
             except NoSuchElementException:
                 logging.info('Could not attack ' + name)
                 sleep_randomized(200, 100)
