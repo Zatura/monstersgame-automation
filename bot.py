@@ -128,8 +128,8 @@ class Bot:
                 else:
                     logging.info('Could not attack ' + name + ', last attack was ' + round(hours, 2) + ' ago.')
             except NoSuchElementException:
-                logging.info('Could not attack ' + name)
-                sleep_randomized(200, 100)
+                logging.info('Could not attack ' + name + ' NoSuchElementException')
+                sleep_randomized(5, 5)
                 continue
         logging.info("Finish hunt")
 
