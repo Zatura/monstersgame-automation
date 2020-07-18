@@ -1,7 +1,7 @@
-from model.bot import Bot
-from schedule.loops.time_loop import TimeLoop
-from schedule.loops.counter_loop import CounterLoop
-from schedule.scheduler import Scheduler
+from src.model import Bot
+from src.schedule.loops import TimeLoop
+from src.schedule.loops import CounterLoop
+from src.schedule.scheduler import Scheduler
 
 bot = Bot()
 scheduler = Scheduler()

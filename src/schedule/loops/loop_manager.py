@@ -1,4 +1,4 @@
-from schedule.loops.loop import Loop
+from src.schedule.loops import Loop
 
 
 class LoopManager:
