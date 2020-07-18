@@ -51,7 +51,7 @@ class Bot:
     def _navigate_graveyeard(self):
         self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=friedhof")
         logging.info('Navigate graveyard')
-        sleep_randomized(0, 2)
+        sleep_randomized(3, 2)
 
     def work(self, hours):
         self._navigate_graveyeard()
@@ -102,7 +102,7 @@ class Bot:
         logging.info("Finish hunt")
 
     def hunt_by_registry(self, quantity=None):
-        with open('../data/bounties.json', "r") as file:
+        with open('./data/bounties.json', "r") as file:
             try:
                 enemies = json.load(file)
             except json.decoder.JSONDecodeError:
