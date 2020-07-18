@@ -12,6 +12,7 @@ scheduler.push(lambda: bot.hunt_humans())
 scheduler.begin(CounterLoop(23))
 scheduler.push(lambda: bot.hunt_by_registry(1))
 scheduler.push(lambda: bot.work(1))
+scheduler.push(lambda: bot.login())
 scheduler.end()
 scheduler.end()
 

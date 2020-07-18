@@ -66,7 +66,6 @@ class Bot:
         logging.info('Start working {} hours at graveyard'.format(hours))
         self._save_punch_clock(hours)
         sleep_randomized(hours*3600, 10)
-        self._navigate_graveyeard()
 
     def hunt_enemies(self):
         while True:
@@ -129,6 +128,7 @@ class Bot:
                     logging.info('Could not attack ' + name, ', last attack was ', hours, ' ago.')
             except NoSuchElementException:
                 logging.info('Could not attack ' + name)
+                logging.info('Sleeping ~300 seconds')
                 sleep_randomized(200, 100)
                 continue
         logging.info("Finish hunt")
@@ -254,7 +254,7 @@ class Bot:
         sleep_randomized(2, 3)
 
     def _save_bounty(self, name, bounty):
-        with open('../data/bounties.json', "a+") as file:
+        with open('./data/bounties.json', "a+") as file:
             try:
                 file.seek(0)
                 enemies = json.load(file)
@@ -263,11 +263,11 @@ class Bot:
             enemies[name] = {}
             enemies[name]['bounty'] = bounty
             enemies[name]['timestamp'] = self._timestamp()
-        with open('../data/bounties.json', "w") as file:
+        with open('./data/bounties.json', "w") as file:
             json.dump(enemies, file, indent=4)
 
     def _save_punch_clock(self, hours):
-        with open('../data/punch_clock.json', "a+") as file:
+        with open('./data/punch_clock.json', "a+") as file:
             try:
                 file.seek(0)
                 entries = json.load(file)
@@ -277,12 +277,12 @@ class Bot:
             timestamp = self._timestamp()
             entry[timestamp] = hours
             entries.append(entry)
-        with open('../data/punch_clock.json', "w") as file:
+        with open('./data/punch_clock.json', "w") as file:
             json.dump(entries, file, indent=4)
 
     @staticmethod
     def _load():
-        with open('../data/bounties.json', "r") as file:
+        with open('./data/bounties.json', "r") as file:
             enemies = json.load(file)
         return enemies
 
