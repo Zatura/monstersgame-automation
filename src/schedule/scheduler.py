@@ -1,5 +1,5 @@
 from src.schedule.loops.loop_manager import LoopManager
-from src.schedule.loops import Loop
+from src.schedule.loops.loop import Loop
 from src.schedule.stack import Stack
 
 

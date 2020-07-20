@@ -12,7 +12,7 @@ class Stack:
             self._position -= 1
             self._position = max(0, self._position)
         except IndexError:
-            print('Queue is already empty')
+            print('Stack is already empty')
 
     def execute(self):
         while True:

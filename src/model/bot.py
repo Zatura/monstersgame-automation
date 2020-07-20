@@ -4,7 +4,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import NoSuchElementException
 from src.auth.credentials import usr, pwd
 from src.model.character import Character
-from src.schedule import sleep_randomized
+from src.schedule.timer import sleep_randomized
 from datetime import datetime, timezone
 import random
 import re
