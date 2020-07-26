@@ -12,13 +12,12 @@ First, setup your secrets at credentials.py
   
 ## Hunt random enemies
 `scheduler.push(lambda: bot.hunt_enemies())`  
-`scheduler.execute()`
+`scheduler.execute()`  
 Attention: Attack criteria should be modified into hunt_enemies() function  
 
 ## Hunt the last 3 most wealthy enemies recently attacked   
 `scheduler.push(lambda: bot.hunt_by_registry(3))`  
-`scheduler.execute()`
-Attention: Attack criteria should be modified into hunt_enemies() function  
+`scheduler.execute()`  
 
 ## Work 5 hours at cemitery    
 `scheduler.push(lambda: bot.work(5))`  
