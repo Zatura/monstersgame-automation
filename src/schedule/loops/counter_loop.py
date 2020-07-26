@@ -1,21 +1,19 @@
-from loops.loop import Loop
+from src.schedule.loops.loop import Loop
 
 
-class CountedLoop(Loop):
-    def __init__(self, count, queue_position):
+class CounterLoop(Loop):
+    def __init__(self, count: int):
         super().__init__()
         self.start_count = 1
         self.end_count = count
         self.current_count = self.start_count
-        self.position = queue_position
 
-    def end_loop(self):
+    def has_finished(self) -> bool:
         return False if (self.current_count < self.end_count) else True
-        pass
 
     def increment_count(self):
         self.current_count += 1
-        pass
 
     def reset_count(self):
-        self.current_count = self.start_count
+        if __name__ == '__main__':
+            self.current_count = self.start_count
