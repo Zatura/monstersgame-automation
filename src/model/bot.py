@@ -2,9 +2,9 @@ from selenium import webdriver
 import logging
 from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import NoSuchElementException
-from src.auth.credentials import usr, pwd
-from src.model.character import Character
-from src.schedule.timer import sleep_randomized
+from credentials import usr, pwd
+from character import Character
+from timer import sleep_randomized
 from datetime import datetime, timezone
 import random
 import re
@@ -51,7 +51,7 @@ class Bot:
     def _navigate_graveyeard(self):
         self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=friedhof")
         logging.info('Navigate graveyard')
-        sleep_randomized(3, 2)
+        sleep_randomized(0, 2)
 
     def work(self, hours):
         self._navigate_graveyeard()
@@ -65,7 +65,8 @@ class Bot:
         graves_list[index].click()
         logging.info('Start working {} hours at graveyard'.format(hours))
         self._save_punch_clock(hours)
-        sleep_randomized(hours*3600, 10)
+        sleep_randomized(hours*3630, 10)
+        self._navigate_graveyeard()
 
     def hunt_enemies(self):
         while True:
@@ -100,8 +101,8 @@ class Bot:
                 continue
         logging.info("Finish hunt")
 
-    def hunt_by_registry(self, quantity=None):
-        with open('./data/bounties.json', "r") as file:
+    def hunt_by_registry(self, quantity=-1):
+        with open('data/bounties.json', "r") as file:
             try:
                 enemies = json.load(file)
             except json.decoder.JSONDecodeError:
@@ -117,7 +118,7 @@ class Bot:
 
         for index, name in enumerate(enemies):
             try:
-                if index == quantity:
+                if not quantity:
                     break
                 hours = (self._timestamp() - enemies[name]['timestamp'])/60/60
                 if hours > 12:
@@ -125,11 +126,12 @@ class Bot:
                     self.enemy = self.find_enemy_by_name(name)
                     self.attack()
                 else:
-                    logging.info('Could not attack ' + name, ', last attack was ', hours, ' ago.')
+                    logging.info('Could not attack {}, last attack was {} hours ago.'.format(name, round(hours, 1)))
+                    continue
+                quantity -= 1
             except NoSuchElementException:
-                logging.info('Could not attack ' + name)
-                logging.info('Sleeping ~300 seconds')
-                sleep_randomized(200, 100)
+                logging.info('Could not attack ' + name + ' NoSuchElementException')
+                sleep_randomized(5, 5)
                 continue
         logging.info("Finish hunt")
 
@@ -171,7 +173,6 @@ class Bot:
             logging.info("Attack  " + result + " Name: " + self.enemy.name + "  Bounty: " + str(gold))
             if winner != self.enemy.name:
                 self._save_bounty(self.enemy.name, gold)
-            sleep_randomized(902, 60)
 
     def repeat_hunt_enemies(self):
         self.driver.find_element_by_xpath('//*[@id="maincontent"]/form/div[4]/input').click()
@@ -254,7 +255,7 @@ class Bot:
         sleep_randomized(2, 3)
 
     def _save_bounty(self, name, bounty):
-        with open('./data/bounties.json', "a+") as file:
+        with open('data/bounties.json', "a+") as file:
             try:
                 file.seek(0)
                 enemies = json.load(file)
@@ -263,11 +264,11 @@ class Bot:
             enemies[name] = {}
             enemies[name]['bounty'] = bounty
             enemies[name]['timestamp'] = self._timestamp()
-        with open('./data/bounties.json', "w") as file:
+        with open('data/bounties.json', "w") as file:
             json.dump(enemies, file, indent=4)
 
     def _save_punch_clock(self, hours):
-        with open('./data/punch_clock.json', "a+") as file:
+        with open('data/punch_clock.json', "a+") as file:
             try:
                 file.seek(0)
                 entries = json.load(file)
@@ -277,12 +278,12 @@ class Bot:
             timestamp = self._timestamp()
             entry[timestamp] = hours
             entries.append(entry)
-        with open('./data/punch_clock.json', "w") as file:
+        with open('data/punch_clock.json', "w") as file:
             json.dump(entries, file, indent=4)
 
     @staticmethod
     def _load():
-        with open('./data/bounties.json', "r") as file:
+        with open('data/bounties.json', "r") as file:
             enemies = json.load(file)
         return enemies
 
