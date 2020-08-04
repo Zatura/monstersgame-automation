@@ -8,12 +8,10 @@ scheduler = Scheduler()
 
 scheduler.push(lambda: bot.login())
 scheduler.begin(TimeLoop())
-scheduler.push(lambda: bot.hunt_humans())
-scheduler.begin(CounterLoop(23))
+scheduler.push(lambda: bot.try_hunt_humans())
 scheduler.push(lambda: bot.hunt_by_registry(1))
 scheduler.push(lambda: bot.work(1))
 scheduler.push(lambda: bot.login())
-scheduler.end()
 scheduler.end()
 
 scheduler.execute()

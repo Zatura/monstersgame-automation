@@ -79,7 +79,7 @@ class Bot:
 
     def hunt_humans(self):
         self._navigate_hunt_page()
-        self.start_hunt_humans()
+        self.click_hunt_humans()
         while True:
             try:
                 self._navigate_hunt_page()
@@ -87,6 +87,12 @@ class Bot:
             except NoSuchElementException:
                 logging.info("Finish hunt")
                 break
+
+    def try_hunt_humans(self):
+        try:
+            self.hunt_humans()
+        except NoSuchElementException:
+            logging.info("Hunt humans not available")
 
     def hunt_by_list(self, hunt_list):
         for name in hunt_list:
@@ -198,7 +204,7 @@ class Bot:
         logging.info("Repeat hunt")
         sleep_randomized(602, 50)
 
-    def start_hunt_humans(self):
+    def click_hunt_humans(self):
         self.driver.find_element_by_xpath('//*[@id="maincontent"]/form[1]/div[5]/table/tbody/tr/td[2]/input').click()
         logging.info("Start hunt")
         sleep_randomized(602, 50)
