@@ -1,6 +1,7 @@
 import re
 from selenium.common.exceptions import NoSuchElementException
 
+
 class Character():
     def __init__(self, driver):
         self.strength = 0
