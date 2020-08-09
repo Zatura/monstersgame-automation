@@ -1,6 +1,6 @@
-from src.schedule.loops.loop_manager import LoopManager
-from src.schedule.loops.loop import Loop
-from src.schedule.stack import Stack
+from schedule.loops.loop_manager import LoopManager
+from schedule.loops.loop import Loop
+from schedule.stack import Stack
 
 
 class Scheduler(Stack):

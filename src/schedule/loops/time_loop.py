@@ -1,5 +1,5 @@
-from src.schedule.loops.loop import Loop
-from src.schedule import timer
+from schedule.loops.loop import Loop
+from schedule import timer
 
 FOREVER = 9999999999
 
