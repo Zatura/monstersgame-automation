@@ -4,12 +4,17 @@ from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import NoSuchElementException
 from auth.credentials import usr, pwd
 from model.character import Character
+from model.storage import Storage
 from schedule.timer import sleep_randomized
 from datetime import datetime, timezone
 import random
 import re
 import json
 import sys
+
+PUNCHCLOCK = 'data/punch_clock.json'
+
+BOUNTIES = 'data/bounties.json'
 
 
 class Bot:
@@ -22,6 +27,7 @@ class Bot:
         self.driver = driver if driver else webdriver.Chrome(options=options)
         self.character = None
         self.enemy = None
+        self._storage = Storage()
         logging.basicConfig(level=logging.INFO,
                             format='%(asctime)s - %(message)s',
                             datefmt='%m-%d-%Y %H:%M:%S',
@@ -261,7 +267,7 @@ class Bot:
         sleep_randomized(2, 3)
 
     def _save_bounty(self, name, bounty):
-        with open('data/bounties.json', "a+") as file:
+        with open(BOUNTIES, "a+") as file:
             try:
                 file.seek(0)
                 enemies = json.load(file)
@@ -270,11 +276,12 @@ class Bot:
             enemies[name] = {}
             enemies[name]['bounty'] = bounty
             enemies[name]['timestamp'] = self._timestamp()
-        with open('data/bounties.json', "w") as file:
+        with open(BOUNTIES, "w") as file:
             json.dump(enemies, file, indent=4)
+        self._storage.upload_file(BOUNTIES)
 
     def _save_punch_clock(self, hours):
-        with open('data/punch_clock.json', "a+") as file:
+        with open(PUNCHCLOCK, "a+") as file:
             try:
                 file.seek(0)
                 entries = json.load(file)
@@ -284,8 +291,9 @@ class Bot:
             timestamp = self._timestamp()
             entry[timestamp] = hours
             entries.append(entry)
-        with open('data/punch_clock.json', "w") as file:
+        with open(PUNCHCLOCK, "w") as file:
             json.dump(entries, file, indent=4)
+        self._storage.upload_file(PUNCHCLOCK)
 
     @staticmethod
     def _load():
