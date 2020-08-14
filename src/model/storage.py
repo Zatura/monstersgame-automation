@@ -44,4 +44,4 @@ class Storage:
         except ClientError as e:
             logging.error(e)
             return False
-        return response
+        return True
