@@ -36,13 +36,12 @@ class Storage:
             return False
         return True
 
-    def download_file(self, file_name, bucket='monstersgame', object_name=None):
-        if object_name is None:
-            object_name = file_name
-
+    def download_file(self, filename, key, bucket='monstersgame'):
         try:
-            response = self.s3_client.download_file(file_name, bucket, object_name)
+            response = self.s3_client.download_file(Filename=filename,
+                                                    Key=key,
+                                                    Bucket=bucket)
         except ClientError as e:
             logging.error(e)
             return False
-        return True
+        return response

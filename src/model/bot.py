@@ -27,11 +27,19 @@ class Bot:
         self.driver = driver if driver else webdriver.Chrome(options=options)
         self.character = None
         self.enemy = None
-        self._storage = Storage()
         logging.basicConfig(level=logging.INFO,
                             format='%(asctime)s - %(message)s',
                             datefmt='%m-%d-%Y %H:%M:%S',
                             stream=sys.stdout)
+        self._storage = Storage()
+        self._load_storage_data()
+
+    def _load_storage_data(self):
+        try:
+            self._storage.download_file(key="data/bounties.json", filename="../../data/bounties.json")
+            self._storage.download_file(key="data/punch_clock.json", filename="../../data/punch_clock.json")
+        except Exception as e:
+            logging.error(e)
 
     def login(self):
         self._navigate_loginpage()
