@@ -1,3 +1,5 @@
+from enum import Enum
+
 from selenium import webdriver
 import logging
 from selenium.webdriver.chrome.options import Options
@@ -13,14 +15,22 @@ import json
 import sys
 
 PUNCHCLOCK = 'data/punch_clock.json'
-
 BOUNTIES = 'data/bounties.json'
 
 
+class Attribute(Enum):
+    STRENGTH = "strength"
+    DEFENSE = "defense"
+    AGILITY = "agility"
+    RESISTANCE = "resistance"
+    ABILITY = "ability"
+
+
 class Bot:
-    def __init__(self, driver=None):
+    def __init__(self, driver=None, headless=True):
         options = Options()
-        options.add_argument("--headless")
+        if headless:
+            options.add_argument("--headless")
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-shm-usage")
         options.add_argument("--remote-debugging-port=4141")
@@ -62,6 +72,31 @@ class Bot:
         logging.info('Navigate huntpage')
         sleep_randomized(2, 3)
 
+    def _navigate_training(self):
+        self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=training")
+        logging.info('Navigate training')
+        sleep_randomized(0, 2)
+
+    def _train_attribute(self, attribute):
+        try:
+            if attribute == Attribute.STRENGTH:
+                self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=training&typ=staerke")
+            if attribute == Attribute.DEFENSE:
+                self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=training&typ=verteidigung")
+            if attribute == Attribute.AGILITY:
+                self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=training&typ=gewandtheit")
+            if attribute == Attribute.RESISTANCE:
+                self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=training&typ=ausdauer")
+            if attribute == Attribute.ABILITY:
+                self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=training&typ=charisma")
+        except NoSuchElementException:
+            logging.info("Couldn't train {}, NoSuchElementException".format(attribute))
+
+    def train(self):
+        ratio = self.character.agility / self.character.resistance
+        attribute = Attribute.AGILITY if ratio < 1.3 else Attribute.RESISTANCE
+        self._train_attribute(attribute)
+
     def _navigate_graveyeard(self):
         self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=friedhof")
         logging.info('Navigate graveyard')
@@ -87,7 +122,7 @@ class Bot:
             self._navigate_hunt_page()
             self.start_hunt_enemies()
             self.enemy = self.find_enemy()
-            can_attack = (self.enemy.agility <= 38) and (self.enemy.resistence <= 38)
+            can_attack = (self.enemy.agility <= 38) and (self.enemy.resistance <= 38)
             if can_attack:
                 self.attack()
 

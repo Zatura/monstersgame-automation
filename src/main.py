@@ -11,6 +11,7 @@ scheduler.push(lambda: bot.try_hunt_humans())
 scheduler.push(lambda: bot.hunt_by_registry(1))
 scheduler.push(lambda: bot.work(1))
 scheduler.push(lambda: bot.login())
+scheduler.push(lambda: bot.train())
 scheduler.end()
 
 scheduler.execute()
