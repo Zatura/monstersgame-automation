@@ -7,6 +7,10 @@ services:
       - 5000:5000
     volumes:
       - data:/monstersgame
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 300s
 networks:
   default:
     driver: bridge
