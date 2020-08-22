@@ -98,9 +98,23 @@ class Bot:
             logging.info("Couldn't train {}, NoSuchElementException".format(attribute))
 
     def train(self):
-        ratio = self.character.agility / self.character.resistance
-        attribute = Attribute.AGILITY if ratio < 1.3 else Attribute.RESISTANCE
+        attribute = self.get_attribute_to_train()
         self._train_attribute(attribute)
+
+    def get_attribute_to_train(self):
+        ratio = self.character.agility / self.character.resistance
+        if ratio < 1.3:
+            return Attribute.AGILITY
+
+        ratio = self.character.resistance / self.character.strength
+        if ratio < 1.2:
+            return Attribute.RESISTANCE
+
+        ratio = self.character.strength / self.character.defense
+        if ratio < 1.3:
+            return Attribute.STRENGTH
+        else:
+            return Attribute.DEFENSE
 
     def _navigate_graveyeard(self):
         self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=friedhof")
