@@ -128,6 +128,7 @@ class Bot:
         try:
             if self.character.vital_energy < limit:
                 self.buy_potion()
+                sleep_randomized(1, 2)
                 self.use_potion()
         except Exception as e:
             print(e)
