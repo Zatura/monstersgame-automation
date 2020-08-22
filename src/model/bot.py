@@ -14,7 +14,7 @@ import re
 import json
 import sys
 
-PUNCHCLOCK = 'data/punch_clock.json'
+PUNCH_CLOCK = 'data/punch_clock.json'
 BOUNTIES = 'data/bounties.json'
 
 
@@ -101,6 +101,19 @@ class Bot:
         self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=friedhof")
         logging.info('Navigate graveyard')
         sleep_randomized(0, 2)
+
+    def _navigate_potion_merchant(self):
+        self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=stadt&sac=warenhaendler&waren=items&"
+                        "prod_group=4")
+        sleep_randomized(0, 2)
+
+    def use_potion(self):
+        self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=status&useitem=2")
+
+    def buy_potion(self):
+        self._navigate_potion_merchant()
+        self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=stadt&sac=warenhaendler&action=buy&item_id=2&"
+                        "prod_group=4&currency=gold&sc=")
 
     def work(self, hours):
         self._navigate_graveyeard()
@@ -263,11 +276,8 @@ class Bot:
         sleep_randomized(1, 3)
 
     def _attack_2(self):
-        try:
-            self.driver.find_element_by_xpath('//*[@id="maincontent"]/form/div[10]/input').click()
-            sleep_randomized(1, 3)
-        except NoSuchElementException:
-            raise NoSuchElementException
+        self.driver.find_element_by_xpath('//*[@id="maincontent"]/form/div[10]/input').click()
+        sleep_randomized(1, 3)
 
     def input_username(self, username):
         usr_input = self.driver.find_element_by_xpath('//*[@id="maincontent"]/form/div[2]/table/tbody/tr[2]/td[2]/table/tbody/tr[2]/td[2]/input')
@@ -324,7 +334,7 @@ class Bot:
         self._storage.upload_file(BOUNTIES)
 
     def _save_punch_clock(self, hours):
-        with open(PUNCHCLOCK, "a+") as file:
+        with open(PUNCH_CLOCK, "a+") as file:
             try:
                 file.seek(0)
                 entries = json.load(file)
@@ -334,9 +344,9 @@ class Bot:
             timestamp = self._timestamp()
             entry[timestamp] = hours
             entries.append(entry)
-        with open(PUNCHCLOCK, "w") as file:
+        with open(PUNCH_CLOCK, "w") as file:
             json.dump(entries, file, indent=4)
-        self._storage.upload_file(PUNCHCLOCK)
+        self._storage.upload_file(PUNCH_CLOCK)
 
     @staticmethod
     def _load():

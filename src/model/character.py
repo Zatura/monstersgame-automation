@@ -27,7 +27,7 @@ class Character():
         self.resistance = self._number_from_xpath('//*[@id="maincontent"]/div[8]/table/tbody/tr[5]/td[2]')
         self.ability = self._number_from_xpath('//*[@id="maincontent"]/div[8]/table/tbody/tr[6]/td[2]')
         self.experience = self._number_from_xpath('//*[@id="maincontent"]/div[8]/table/tbody/tr[6]/td[2]')
-        # self.vital_energy = self._number_from_xpath('//*[@id="maincontent"]/div[8]/table/tbody/tr[7]/td[2]')
+        self.vital_energy = self._vital_energy_from_xpath('//*[@id="maincontent"]/div[8]/table/tbody/tr[9]/td[2]')
         self.attr_mean = (self.strength + self.defense + self.agility + self.resistance) / 4
 
     def _load_from_status2(self):
@@ -37,7 +37,7 @@ class Character():
         self.resistance = self._number_from_xpath('//*[@id="maincontent"]/div[10]/table/tbody/tr[5]/td[2]')
         self.ability = self._number_from_xpath('//*[@id="maincontent"]/div[10]/table/tbody/tr[6]/td[2]')
         self.experience = self._number_from_xpath('//*[@id="maincontent"]/div[10]/table/tbody/tr[6]/td[2]')
-        # self.vital_energy = self._number_from_xpath('//*[@id="maincontent"]/div[8]/table/tbody/tr[7]/td[2]')
+        self.vital_energy = self._vital_energy_from_xpath('//*[@id="maincontent"]/div[10]/table/tbody/tr[9]/td[2]')
         self.attr_mean = (self.strength + self.defense + self.agility + self.resistance) / 4
 
     def load_from_hunt(self):
@@ -75,10 +75,15 @@ class Character():
         self.resistance = self._number_from_xpath('//*[@id="maincontent"]/form/div[11]/table/tbody/tr[5]/td[2]')
         self.ability = self._number_from_xpath('//*[@id="maincontent"]/form/div[11]/table/tbody/tr[6]/td[2]')
         self.attr_mean = (self.strength + self.defense + self.agility + self.resistance) / 4
-        # self.experience = self._number_from_xpath('//*[@id="maincontent"]/form/div[11]/table/tbody/tr[7]/td[2]')
 
     def _number_from_xpath(self, xpath):
         pattern = re.compile(r'\((?P<number>\w+)\)')
         element = self.driver.find_element_by_xpath(xpath)
         number = pattern.search(element.text).group("number")
+        return int(number)
+
+    def _vital_energy_from_xpath(self, xpath):
+        pattern = re.compile(r'\((?P<vital_energy>\w+)\|\d+\)')
+        element = self.driver.find_element_by_xpath(xpath)
+        number = pattern.search(element.text).group("vital_energy")
         return int(number)
