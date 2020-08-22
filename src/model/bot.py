@@ -72,6 +72,11 @@ class Bot:
         logging.info('Navigate huntpage')
         sleep_randomized(2, 3)
 
+    def _navigate_status_page(self):
+        self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=status")
+        sleep_randomized(1, 2)
+        self.character.load_from_status()
+
     def _navigate_training(self):
         self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=training")
         logging.info('Navigate training')
@@ -108,12 +113,24 @@ class Bot:
         sleep_randomized(0, 2)
 
     def use_potion(self):
+        self._navigate_status_page()
         self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=status&useitem=2")
+        sleep_randomized(1, 2)
+        self.character.load_from_status()
 
     def buy_potion(self):
         self._navigate_potion_merchant()
         self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=stadt&sac=warenhaendler&action=buy&item_id=2&"
                         "prod_group=4&currency=gold&sc=")
+        self.driver.find_element_by_xpath('//*[@id="trader_btn"]').click()
+
+    def restore_vital_energy_above(self, limit):
+        try:
+            if self.character.vital_energy < limit:
+                self.buy_potion()
+                self.use_potion()
+        except Exception as e:
+            print(e)
 
     def work(self, hours):
         self._navigate_graveyeard()
