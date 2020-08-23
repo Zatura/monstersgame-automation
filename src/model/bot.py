@@ -15,6 +15,8 @@ import re
 import json
 import sys
 
+HOUR_IN_SECONDS = 60 * 60
+
 PUNCH_CLOCK = 'data/punch_clock.json'
 BOUNTIES = 'data/bounties.json'
 
@@ -194,7 +196,7 @@ class Bot:
             try:
                 if not quantity:
                     break
-                hours = (self.__timestamp() - enemies[name]['timestamp']) / 60 / 60
+                hours = (self.__timestamp() - enemies[name]['timestamp']) / HOUR_IN_SECONDS
                 if hours > 12:
                     self.navigate.hunt_page()
                     self.enemy = self.__find_enemy_by_name(name)
