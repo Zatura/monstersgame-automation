@@ -6,6 +6,7 @@ bot = Bot()
 scheduler = Scheduler()
 
 scheduler.push(lambda: bot.login())
+scheduler.push(lambda: bot.restore_vital_energy_above(25))
 scheduler.begin(TimeLoop())
 scheduler.push(lambda: bot.try_hunt_humans())
 scheduler.push(lambda: bot.hunt_by_registry(1))

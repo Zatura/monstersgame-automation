@@ -1,5 +1,4 @@
 import logging
-
 from schedule.timer import sleep_randomized
 
 

@@ -30,7 +30,7 @@ class Storage:
             object_name = file_name
 
         try:
-            response = self.s3_client.upload_file(file_name, bucket, object_name)
+            self.s3_client.upload_file(file_name, bucket, object_name)
         except ClientError as e:
             logging.error(e)
             return False
@@ -38,9 +38,9 @@ class Storage:
 
     def download_file(self, filename, key, bucket='monstersgame'):
         try:
-            response = self.s3_client.download_file(Filename=filename,
-                                                    Key=key,
-                                                    Bucket=bucket)
+            self.s3_client.download_file(Filename=filename,
+                                         Key=key,
+                                         Bucket=bucket)
         except ClientError as e:
             logging.error(e)
             return False
