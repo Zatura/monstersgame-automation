@@ -33,7 +33,7 @@ class Navigation:
         logging.info('Navigate potion merchant')
         sleep_randomized(0, 2)
 
-    def graveyeard_page(self):
+    def graveyard_page(self):
         self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=friedhof")
         logging.info('Navigate graveyard')
         sleep_randomized(0, 2)
