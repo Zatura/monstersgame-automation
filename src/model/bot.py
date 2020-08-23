@@ -59,7 +59,8 @@ class Bot:
         self.navigate.login_page()
         self.__input_username(usr)
         self.__input_password(pwd)
-        send_btn = self.driver.find_element_by_xpath('//*[@id="maincontent"]/form/div[2]/table/tbody/tr[2]/td[2]/table/tbody/tr[4]/td/input')
+        send_btn = self.driver.find_element_by_xpath('//*[@id="maincontent"]/form/div[2]/table/tbody/tr[2]/td[2]/table/'
+                                                     'tbody/tr[4]/td/input')
         send_btn.click()
         logging.info('Login successful')
         self.character = Character(self.driver)
@@ -288,12 +289,14 @@ class Bot:
         sleep_randomized(1, 3)
 
     def __input_username(self, username):
-        usr_input = self.driver.find_element_by_xpath('//*[@id="maincontent"]/form/div[2]/table/tbody/tr[2]/td[2]/table/tbody/tr[2]/td[2]/input')
+        usr_input = self.driver.find_element_by_xpath('//*[@id="maincontent"]/form/div[2]/table/tbody/tr[2]/td[2]/'
+                                                      'table/tbody/tr[2]/td[2]/input')
         usr_input.click()
         usr_input.send_keys(username)
 
     def __input_password(self, password):
-        pwd_input = self.driver.find_element_by_xpath('//*[@id="maincontent"]/form/div[2]/table/tbody/tr[2]/td[2]/table/tbody/tr[3]/td[2]/input')
+        pwd_input = self.driver.find_element_by_xpath('//*[@id="maincontent"]/form/div[2]/table/tbody/tr[2]/td[2]/'
+                                                      'table/tbody/tr[3]/td[2]/input')
         pwd_input.click()
         pwd_input.send_keys(password)
 
