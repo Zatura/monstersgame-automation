@@ -44,9 +44,9 @@ class Bot:
                             datefmt='%m-%d-%Y %H:%M:%S',
                             stream=sys.stdout)
         self._storage = Storage()
-        self._load_storage_data()
+        self.__load_storage_data()
 
-    def _load_storage_data(self):
+    def __load_storage_data(self):
         try:
             self._storage.download_file(key="data/bounties.json", filename="../../data/bounties.json")
             self._storage.download_file(key="data/punch_clock.json", filename="../../data/punch_clock.json")
@@ -55,8 +55,8 @@ class Bot:
 
     def login(self):
         self.navigate.login_page()
-        self.input_username(usr)
-        self.input_password(pwd)
+        self.__input_username(usr)
+        self.__input_password(pwd)
         send_btn = self.driver.find_element_by_xpath('//*[@id="maincontent"]/form/div[2]/table/tbody/tr[2]/td[2]/table/tbody/tr[4]/td/input')
         send_btn.click()
         logging.info('Login successful')
@@ -64,27 +64,12 @@ class Bot:
         self.character.load_from_status()
         self.navigate.graveyeard_page()
 
-    def _train_attribute(self, attribute):
-        try:
-            if attribute == Attribute.STRENGTH:
-                self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=training&typ=staerke")
-            if attribute == Attribute.DEFENSE:
-                self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=training&typ=verteidigung")
-            if attribute == Attribute.AGILITY:
-                self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=training&typ=gewandtheit")
-            if attribute == Attribute.RESISTANCE:
-                self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=training&typ=ausdauer")
-            if attribute == Attribute.ABILITY:
-                self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=training&typ=charisma")
-        except NoSuchElementException:
-            logging.info("Couldn't train {}, NoSuchElementException".format(attribute))
-
     def train(self):
         self.navigate.training_page()
-        attribute = self.get_attribute_to_train()
-        self._train_attribute(attribute)
+        attribute = self.__get_attribute_to_train()
+        self.__train_attribute(attribute)
 
-    def get_attribute_to_train(self):
+    def __get_attribute_to_train(self):
         ratio = self.character.agility / self.character.resistance
         if ratio < 1.3:
             return Attribute.AGILITY
@@ -98,6 +83,21 @@ class Bot:
             return Attribute.STRENGTH
         else:
             return Attribute.DEFENSE
+
+    def __train_attribute(self, attribute):
+        try:
+            if attribute == Attribute.STRENGTH:
+                self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=training&typ=staerke")
+            if attribute == Attribute.DEFENSE:
+                self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=training&typ=verteidigung")
+            if attribute == Attribute.AGILITY:
+                self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=training&typ=gewandtheit")
+            if attribute == Attribute.RESISTANCE:
+                self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=training&typ=ausdauer")
+            if attribute == Attribute.ABILITY:
+                self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=training&typ=charisma")
+        except NoSuchElementException:
+            logging.info("Couldn't train {}, NoSuchElementException".format(attribute))
 
     def use_potion(self):
         self.navigate.status_page()
@@ -132,26 +132,26 @@ class Bot:
         index = random.randint(0, size - 1)
         graves_list[index].click()
         logging.info('Start working {} hours at graveyard'.format(hours))
-        self._save_punch_clock(hours)
+        self.__save_punch_clock(hours)
         sleep_randomized(hours*3630, 10)
         self.navigate.graveyeard_page()
 
     def hunt_enemies(self):
         while True:
             self.navigate.hunt_page()
-            self.start_hunt_enemies()
-            self.enemy = self.find_enemy()
+            self.__start_hunt_enemies()
+            self.enemy = self.__find_enemy()
             can_attack = (self.enemy.agility <= 38) and (self.enemy.resistance <= 38)
             if can_attack:
-                self.attack()
+                self.__attack()
 
     def hunt_humans(self):
         self.navigate.hunt_page()
-        self.click_hunt_humans()
+        self.__click_hunt_humans()
         while True:
             try:
                 self.navigate.hunt_page()
-                self.repeat_hunt_humans()
+                self.__repeat_hunt_humans()
             except NoSuchElementException:
                 logging.info("Finish hunt")
                 break
@@ -166,8 +166,8 @@ class Bot:
         for name in hunt_list:
             try:
                 self.navigate.hunt_page()
-                self.enemy = self.find_enemy_by_name(name)
-                self.attack()
+                self.enemy = self.__find_enemy_by_name(name)
+                self.__attack()
             except NoSuchElementException:
                 logging.info('Could not attack ' + name)
                 logging.info('Sleeping ~360 seconds')
@@ -181,8 +181,8 @@ class Bot:
                 enemies = json.load(file)
             except json.decoder.JSONDecodeError:
                 logging.info('You have not performed any attack yet')
-        hunt_last_time = self.get_hunt_last_time(enemies)
-        elapsed_minutes = int((self._timestamp() - hunt_last_time) / 60)
+        hunt_last_time = self.__get_hunt_last_time(enemies)
+        elapsed_minutes = int((self.__timestamp() - hunt_last_time) / 60)
         if elapsed_minutes < 15:
             wait_minutes = 15 - elapsed_minutes
             logging.info('You must wait {} minutes to hunt, sleeping...'.format(wait_minutes))
@@ -194,11 +194,11 @@ class Bot:
             try:
                 if not quantity:
                     break
-                hours = (self._timestamp() - enemies[name]['timestamp'])/60/60
+                hours = (self.__timestamp() - enemies[name]['timestamp']) / 60 / 60
                 if hours > 12:
                     self.navigate.hunt_page()
-                    self.enemy = self.find_enemy_by_name(name)
-                    self.attack()
+                    self.enemy = self.__find_enemy_by_name(name)
+                    self.__attack()
                 else:
                     logging.info('Could not attack {}, last attack was {} hours ago.'.format(name, round(hours, 1)))
                     continue
@@ -219,48 +219,48 @@ class Bot:
         name = entry[0]
         return enemies[name]['timestamp']
 
-    def get_hunt_last_time(self, enemies):
+    def __get_hunt_last_time(self, enemies):
         enemies = sorted(enemies.items(), key=lambda entry: self.timestamp_from_entry(enemies, entry), reverse=True)
         enemies = dict(enemies)
         entry = next(iter(enemies.values()))
         return entry['timestamp']
 
-    def find_enemy(self):
+    def __find_enemy(self):
         enemy = Character(self.driver)
         while True:
             try:
                 enemy.load_from_hunt()
                 break
             except NoSuchElementException:
-                self.repeat_hunt_enemies()
+                self.__repeat_hunt_enemies()
         return enemy
 
-    def attack(self):
+    def __attack(self):
         try:
-            self._attack_1()
+            self.__attack_1()
         except NoSuchElementException:
             sleep_randomized(1, 0)
-            self._attack_2()
+            self.__attack_2()
         finally:
-            winner, gold = self.get_enemy_hunt_result()
+            winner, gold = self.__get_enemy_hunt_result()
             result = "WIN " if winner != self.enemy.name else "LOST"
             logging.info("Attack  " + result + " Name: " + self.enemy.name + "  Bounty: " + str(gold))
             if winner != self.enemy.name:
-                self._save_bounty(self.enemy.name, gold)
+                self.__save_bounty(self.enemy.name, gold)
 
-    def repeat_hunt_enemies(self):
+    def __repeat_hunt_enemies(self):
         self.driver.find_element_by_xpath('//*[@id="maincontent"]/form/div[4]/input').click()
         sleep_randomized(1, 2)
 
-    def repeat_hunt_targeted_enemy(self):
+    def __repeat_hunt_targeted_enemy(self):
         self.driver.find_element_by_xpath('/html/body/div[2]/div[2]/div[2]/form/div[4]/input').click()
         sleep_randomized(0.1, 1)
 
-    def start_hunt_enemies(self):
+    def __start_hunt_enemies(self):
         self.driver.find_element_by_xpath('//*[@id="maincontent"]/form[3]/div[4]/input').click()
         sleep_randomized(1, 3)
 
-    def repeat_hunt_humans(self):
+    def __repeat_hunt_humans(self):
         try:
             self.driver.find_element_by_xpath('//*[@id="maincontent"]/div[4]/center/form[1]/input[4]').click()
         except NoSuchElementException:
@@ -272,38 +272,38 @@ class Bot:
         logging.info("Repeat hunt")
         sleep_randomized(602, 50)
 
-    def click_hunt_humans(self):
+    def __click_hunt_humans(self):
         self.driver.find_element_by_xpath('//*[@id="maincontent"]/form[1]/div[5]/table/tbody/tr/td[2]/input').click()
         logging.info("Start hunt")
         sleep_randomized(602, 50)
 
-    def _attack_1(self):
+    def __attack_1(self):
         self.driver.find_element_by_xpath('//*[@id="maincontent"]/form/div[12]/input').click()
         sleep_randomized(1, 3)
 
-    def _attack_2(self):
+    def __attack_2(self):
         self.driver.find_element_by_xpath('//*[@id="maincontent"]/form/div[10]/input').click()
         sleep_randomized(1, 3)
 
-    def input_username(self, username):
+    def __input_username(self, username):
         usr_input = self.driver.find_element_by_xpath('//*[@id="maincontent"]/form/div[2]/table/tbody/tr[2]/td[2]/table/tbody/tr[2]/td[2]/input')
         usr_input.click()
         usr_input.send_keys(username)
 
-    def input_password(self, password):
+    def __input_password(self, password):
         pwd_input = self.driver.find_element_by_xpath('//*[@id="maincontent"]/form/div[2]/table/tbody/tr[2]/td[2]/table/tbody/tr[3]/td[2]/input')
         pwd_input.click()
         pwd_input.send_keys(password)
 
-    def get_enemy_hunt_result(self):
+    def __get_enemy_hunt_result(self):
         text = self.driver.find_element_by_xpath('//*[@id="maincontent"]/div[12]/table/tbody/tr[5]/td').text
         pattern = re.compile(r'(?P<winner>(\w| )+) conquistou (?P<gold>\d+)')
         winner = pattern.search(text).group("winner")
         gold = pattern.search(text).group("gold")
         return winner, int(gold)
 
-    def find_enemy_by_name(self, name):
-        self.insert_enemy_name(name)
+    def __find_enemy_by_name(self, name):
+        self.__insert_enemy_name(name)
         enemy = Character(self.driver)
         attempt = 0
         while True:
@@ -313,19 +313,19 @@ class Bot:
                 attempt += 1
                 break
             except NoSuchElementException:
-                self.repeat_hunt_targeted_enemy()
+                self.__repeat_hunt_targeted_enemy()
             if attempt > 20:
                 raise NoSuchElementException
         return enemy
 
-    def insert_enemy_name(self, name):
+    def __insert_enemy_name(self, name):
         name_input = self.driver.find_element_by_xpath('//*[@id="searchthing"]')
         name_input.click()
         name_input.send_keys(name)
         self.driver.find_element_by_xpath('/html/body/div[2]/div[2]/div[2]/form[2]/div[5]/input').click()
         sleep_randomized(2, 3)
 
-    def _save_bounty(self, name, bounty):
+    def __save_bounty(self, name, bounty):
         with open(BOUNTIES, "a+") as file:
             try:
                 file.seek(0)
@@ -334,12 +334,12 @@ class Bot:
                 enemies = {}
             enemies[name] = {}
             enemies[name]['bounty'] = bounty
-            enemies[name]['timestamp'] = self._timestamp()
+            enemies[name]['timestamp'] = self.__timestamp()
         with open(BOUNTIES, "w") as file:
             json.dump(enemies, file, indent=4)
         self._storage.upload_file(BOUNTIES)
 
-    def _save_punch_clock(self, hours):
+    def __save_punch_clock(self, hours):
         with open(PUNCH_CLOCK, "a+") as file:
             try:
                 file.seek(0)
@@ -347,7 +347,7 @@ class Bot:
             except json.decoder.JSONDecodeError:
                 entries = []
             entry = {}
-            timestamp = self._timestamp()
+            timestamp = self.__timestamp()
             entry[timestamp] = hours
             entries.append(entry)
         with open(PUNCH_CLOCK, "w") as file:
@@ -355,12 +355,12 @@ class Bot:
         self._storage.upload_file(PUNCH_CLOCK)
 
     @staticmethod
-    def _load():
+    def __load():
         with open('data/bounties.json', "r") as file:
             enemies = json.load(file)
         return enemies
 
     @staticmethod
-    def _timestamp():
+    def __timestamp():
         timestamp = datetime.now(timezone.utc).timestamp()
         return int(timestamp)
