@@ -62,7 +62,7 @@ class Bot:
         logging.info('Login successful')
         self.character = Character(self.driver)
         self.character.load_from_status()
-        self.navigate.graveyeard_page()
+        self.navigate.graveyard_page()
 
     def train(self):
         self.navigate.training_page()
@@ -122,7 +122,7 @@ class Bot:
             print(e)
 
     def work(self, hours):
-        self.navigate.graveyeard_page()
+        self.navigate.graveyard_page()
         dropdown = self.driver.find_element_by_xpath('//*[@id="jobler"]/div[4]/p/select')
         property = dropdown.get_property(str(hours - 1))
         property.click()
@@ -134,7 +134,7 @@ class Bot:
         logging.info('Start working {} hours at graveyard'.format(hours))
         self.__save_punch_clock(hours)
         sleep_randomized(hours*3630, 10)
-        self.navigate.graveyeard_page()
+        self.navigate.graveyard_page()
 
     def hunt_enemies(self):
         while True:
