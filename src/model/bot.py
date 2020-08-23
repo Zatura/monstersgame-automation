@@ -6,6 +6,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import NoSuchElementException
 from auth.credentials import usr, pwd
 from model.character import Character
+from model.navigation import Navigation
 from model.storage import Storage
 from schedule.timer import sleep_randomized
 from datetime import datetime, timezone
@@ -35,6 +36,7 @@ class Bot:
         options.add_argument("--disable-dev-shm-usage")
         options.add_argument("--remote-debugging-port=4141")
         self.driver = driver if driver else webdriver.Chrome(options=options)
+        self.navigate = Navigation(self.driver)
         self.character = None
         self.enemy = None
         logging.basicConfig(level=logging.INFO,
@@ -52,7 +54,7 @@ class Bot:
             logging.error(e)
 
     def login(self):
-        self._navigate_loginpage()
+        self.navigate.login_page()
         self.input_username(usr)
         self.input_password(pwd)
         send_btn = self.driver.find_element_by_xpath('//*[@id="maincontent"]/form/div[2]/table/tbody/tr[2]/td[2]/table/tbody/tr[4]/td/input')
@@ -60,27 +62,7 @@ class Bot:
         logging.info('Login successful')
         self.character = Character(self.driver)
         self.character.load_from_status()
-        self._navigate_graveyeard()
-
-    def _navigate_loginpage(self):
-        self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=loginpage")
-        logging.info('Navigate loginpage')
-        sleep_randomized(3, 2)
-
-    def _navigate_hunt_page(self):
-        self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=raubzug")
-        logging.info('Navigate huntpage')
-        sleep_randomized(2, 3)
-
-    def _navigate_status_page(self):
-        self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=status")
-        sleep_randomized(1, 2)
-        self.character.load_from_status()
-
-    def _navigate_training(self):
-        self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=training")
-        logging.info('Navigate training')
-        sleep_randomized(0, 2)
+        self.navigate.graveyeard_page()
 
     def _train_attribute(self, attribute):
         try:
@@ -98,6 +80,7 @@ class Bot:
             logging.info("Couldn't train {}, NoSuchElementException".format(attribute))
 
     def train(self):
+        self.navigate.training_page()
         attribute = self.get_attribute_to_train()
         self._train_attribute(attribute)
 
@@ -116,24 +99,15 @@ class Bot:
         else:
             return Attribute.DEFENSE
 
-    def _navigate_graveyeard(self):
-        self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=friedhof")
-        logging.info('Navigate graveyard')
-        sleep_randomized(0, 2)
-
-    def _navigate_potion_merchant(self):
-        self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=stadt&sac=warenhaendler&waren=items&"
-                        "prod_group=4")
-        sleep_randomized(0, 2)
-
     def use_potion(self):
-        self._navigate_status_page()
+        self.navigate.status_page()
+        self.character.load_from_status()
         self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=status&useitem=2")
         sleep_randomized(1, 2)
         self.character.load_from_status()
 
     def buy_potion(self):
-        self._navigate_potion_merchant()
+        self.navigate.potion_merchant_page()
         self.driver.get("http://pt1.monstersgame.moonid.net/index.php?ac=stadt&sac=warenhaendler&action=buy&item_id=2&"
                         "prod_group=4&currency=gold&sc=")
         self.driver.find_element_by_xpath('//*[@id="trader_btn"]').click()
@@ -148,7 +122,7 @@ class Bot:
             print(e)
 
     def work(self, hours):
-        self._navigate_graveyeard()
+        self.navigate.graveyeard_page()
         dropdown = self.driver.find_element_by_xpath('//*[@id="jobler"]/div[4]/p/select')
         property = dropdown.get_property(str(hours - 1))
         property.click()
@@ -160,11 +134,11 @@ class Bot:
         logging.info('Start working {} hours at graveyard'.format(hours))
         self._save_punch_clock(hours)
         sleep_randomized(hours*3630, 10)
-        self._navigate_graveyeard()
+        self.navigate.graveyeard_page()
 
     def hunt_enemies(self):
         while True:
-            self._navigate_hunt_page()
+            self.navigate.hunt_page()
             self.start_hunt_enemies()
             self.enemy = self.find_enemy()
             can_attack = (self.enemy.agility <= 38) and (self.enemy.resistance <= 38)
@@ -172,11 +146,11 @@ class Bot:
                 self.attack()
 
     def hunt_humans(self):
-        self._navigate_hunt_page()
+        self.navigate.hunt_page()
         self.click_hunt_humans()
         while True:
             try:
-                self._navigate_hunt_page()
+                self.navigate.hunt_page()
                 self.repeat_hunt_humans()
             except NoSuchElementException:
                 logging.info("Finish hunt")
@@ -191,7 +165,7 @@ class Bot:
     def hunt_by_list(self, hunt_list):
         for name in hunt_list:
             try:
-                self._navigate_hunt_page()
+                self.navigate.hunt_page()
                 self.enemy = self.find_enemy_by_name(name)
                 self.attack()
             except NoSuchElementException:
@@ -222,7 +196,7 @@ class Bot:
                     break
                 hours = (self._timestamp() - enemies[name]['timestamp'])/60/60
                 if hours > 12:
-                    self._navigate_hunt_page()
+                    self.navigate.hunt_page()
                     self.enemy = self.find_enemy_by_name(name)
                     self.attack()
                 else:
