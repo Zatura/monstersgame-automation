@@ -28,4 +28,5 @@ Attention: Attack criteria should be modified into hunt_enemies() function
 `scheduler.execute()`  
 known_enemies should be a list of strings into enemies.py
 
+![image](https://user-images.githubusercontent.com/7329177/115079953-55877f80-9ed8-11eb-941e-57152824e4ae.png)
 
