@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Clone') {
       steps {
-        git 'github.com/zatura/monstersgame-automation'
+        sleep 5
       }
     }
 
