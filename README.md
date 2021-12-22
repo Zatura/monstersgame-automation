@@ -1,3 +1,5 @@
+[![Build Status](https://app.travis-ci.com/Zatura/monstersgame-automation.svg?branch=master)](https://travis-ci.org/azu/travis-badge)
+
 # monstersgame-automation
 ## Login  
 First, setup your secrets at credentials.py  
