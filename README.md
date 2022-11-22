@@ -26,7 +26,7 @@ scheduler.execute()
 ```
 Important: Attack criteria should be modified into hunt_enemies() function  
 
-## Hunt the last 3 most wealthy enemies recently attacked   
+## Hunt the last 3 most wealthy recently attacked enemies  
 ```python
 scheduler.push(lambda: bot.hunt_by_registry(3))
 scheduler.execute()
